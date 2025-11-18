@@ -8,26 +8,17 @@ if not h1 or not h2 or len(h1) != len(h2):
     import sys
     sys.exit(1)
 
-differentBits = 0
+# Convert hex string to integer to binary
+b1 = bin(int(h1, 16))[2:].zfill(len(h1) * 4)
+b2 = bin(int(h2, 16))[2:].zfill(len(h2) * 4)
 
-for i in range(len(h1)):
+# Count bit matches
+same_bits = sum(1 for x, y in zip(b1, b2) if x == y)
+diff_bits = len(b1) - same_bits
 
-    h1Ascii = ord(h1[i])
-    h2Ascii = ord(h2[i])
-    
-    # xor the two ascii values to find the different bits.
-    xorResult = h1Ascii ^ h2Ascii
-    
-    temp_xor = xorResult
-    while temp_xor > 0:
-        if temp_xor % 2 == 1:
-            differentBits += 1
-        temp_xor //= 2
+print(f"Total bits compared: {len(b1)}")
+print(f"Number of same bits: {same_bits}")
+print(f"Number of different bits: {diff_bits}")
 
-totalBits = len(h1) * 8
-
-print("Total bits compared (based on character ASCII): " + str(totalBits))
-print("Number of different bits: " + str(differentBits))
-
-sameBits = totalBits - differentBits
-print("Number of same bits: " + str(sameBits))
+percentage = (same_bits / len(b1)) * 100
+print(f"Percentage of matching bits: {percentage:.2f}%")
